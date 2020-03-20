@@ -1,21 +1,33 @@
 package curso.aula5;
 
+import java.text.NumberFormat;
+
 public class Banco {
- public Integer numConta;
+ public int numConta;
  protected String tipo;
  private String dono;
  private Float saldo;
  private Boolean status;
+ private NumberFormat format;
+
+ public void estadoAtual() {
+   System.out.println("Conta: " + this.getNumConta());
+   System.out.println("Tipo: " + this.getTipo());
+   System.out.println("Dono: " + this.getDono());
+   System.out.println("Saldo: " + this.getSaldo());
+   System.out.println("Status: " + this.getStatus());
+ }
 
 public Banco (Float s, Boolean st) { // metodo constructor
   this.saldo = s;
   this.status = st;
+  this.format = NumberFormat.getCurrencyInstance();
 }
- public Integer getnumConta () { // utilizando metodo Getter, retorna valor
+ public int getNumConta () { // utilizando metodo Getter, retorna valor
 
   return this.numConta;
   }
-  public void setnumConta(Integer n) { // utilizando metodo Setter
+  public void setNumConta(int n) { // utilizando metodo Setter
 
     this.numConta = n;
   }
@@ -62,8 +74,13 @@ public Banco (Float s, Boolean st) { // metodo constructor
 
     if(tipo == "cc") {
       saldo = 50f;
+      System.out.println("-------------------------------------------------------------------------------------");
+      System.out.println("Conta aberta com sucesso!");
+      System.out.println("-------------------------------------------------------------------------------------");
     } else if(tipo == "cp") {
       saldo = 150f;
+      System.out.println("-------------------------------------------------------------------------------------");
+      System.out.println("Conta aberta com sucesso!");
     }
   }
 
@@ -73,12 +90,16 @@ public Banco (Float s, Boolean st) { // metodo constructor
     } else if(saldo < 0) {
       System.out.println("Conta em débito");
     } else {
+      System.out.println("Conta fechada com sucesso!");
       setStatus(false);
     }
    }
    public void depositar(Float v) {
      if(status == true) {
        setSaldo(getSaldo() + v);
+       System.out.println("Depósito de " + format.format(v) + " realizado com sucesso na conta de: " +
+       this.getDono());
+       System.out.println("-------------------------------------------------------------------------------------");
       //  saldo = saldo + v;
      } else {
        System.out.println("Impossível depositar");
@@ -87,10 +108,12 @@ public Banco (Float s, Boolean st) { // metodo constructor
    public void sacar(Float v) {
 
     if(getStatus() == true) {
-      if(getSaldo() > v) {
+      if(getSaldo() >= v) {
         setSaldo(getSaldo() - v);
+        System.out.println("Saque de: " + format.format(v) + " realizado com sucesso na conta de "
+        + this.getDono());
       } else {
-        System.out.println("Saldo insuficiente");
+        System.out.println("Saldo insuficiente para saque");
       }
     } else {
       System.out.println("Impossível sacar");
@@ -106,9 +129,13 @@ public Banco (Float s, Boolean st) { // metodo constructor
      if(getStatus() == true) {
        if(getSaldo() > v) {
          setSaldo(getSaldo() - v);
+         System.out.println("Mensalidade pagar com sucesso por" +
+         this.getDono());
        } else {
          System.err.println("Impossível pagar");
        }
+     } else {
+       System.out.println("Impossível pagar uma conta fechada!");
      }
    }
 }
